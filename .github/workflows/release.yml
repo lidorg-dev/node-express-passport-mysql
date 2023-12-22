@@ -1,4 +1,4 @@
-name: NodeJs Package
+name: NodeJs Release
 
 on:
   release:
