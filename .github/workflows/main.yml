@@ -1,0 +1,41 @@
+name: NodeJs Package
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  Build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Node
+      uses: actions/setup-node@v4.0.1
+      with:
+        node-version: '10.15.1'
+    - name: Install dependencies
+      run: |
+        npm install
+       
+      
+
+    - name: Archive Release
+      uses: thedoctor0/zip-release@0.7.5
+      with:
+        type: 'zip'
+        filename: "package-${{github.ref_name}}.zip"
+        exclusions: '*.git*  .editorconfig'
+
+    - name: Upload Release
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        artifacts: "package-${{github.ref_name}}.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        allowUpdates: true
+  
